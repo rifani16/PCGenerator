@@ -50,8 +50,8 @@ async function loadData() {
   try {
     // Load kedua file JSON secara paralel
     const [configResponse, programsResponse] = await Promise.all([
-      fetch('../json/data.json'),
-      fetch('../json/program.json')
+      fetch('/PCGenerator/json/data.json'),
+      fetch('/PCGenerator/json/program.json')
     ]);
 
     if (!configResponse.ok || !programsResponse.ok) {
