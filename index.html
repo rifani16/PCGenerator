@@ -74,7 +74,15 @@
         <label for="konfirmasiInput">
           Nomor Konfirmasi (Opsional)
         </label>
-        <input type="text" id="konfirmasiInput" placeholder="Contoh: 0812-9999-8888" autocomplete="off" spellcheck="false" />
+        <input 
+          type="text" 
+          id="konfirmasiInput" 
+          placeholder="Contoh: 081234567890" 
+          autocomplete="off" 
+          spellcheck="false"
+          inputmode="numeric"
+          pattern="[0-9\s\-]*"
+          maxlength="18" />
         <small class="input-hint">Kosongkan jika tidak ingin menggunakan nomor pribadi</small>
       </div>
 
@@ -102,11 +110,14 @@
             <span class="btn-icon">📱</span>
             <span class="btn-label">
               <span class="btn-title">QRIS</span>
-              <span class="btn-subtitle">Pilih daerah</span>
+              <span class="btn-subtitle">Pilih Daerah</span>
             </span>
           </button>
         </div>
       </div>
+
+      <!-- Divider -->
+      <div class="form-divider"></div>
 
       <button class="btn btn-primary" id="generateBtn">
         ⚡ Generate &amp; Copy

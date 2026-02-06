@@ -62,7 +62,7 @@ async function loadData() {
   try {
     const BASE_PATH = window.location.pathname.includes('/PCGenerator/')
     ? '/PCGenerator'
-    : '';
+    : '..';
     
     const CONFIG_URL = `${BASE_PATH}/json/data.json`;
     const PROGRAM_URL = `${BASE_PATH}/json/program.json`;
@@ -158,6 +158,78 @@ function bindEvents() {
   affiliateInput.addEventListener('input', resetPreview);
   affiliateLinkInput.addEventListener('input', resetPreview);
   konfirmasiInput.addEventListener('input', resetPreview);
+
+  // Validasi input konfirmasi (hanya angka)
+  konfirmasiInput.addEventListener('input', handleKonfirmasiInput);
+  konfirmasiInput.addEventListener('blur', validateKonfirmasiNumber);
+}
+
+/**
+ * Handle input konfirmasi - hanya izinkan angka dan beberapa karakter format.
+ */
+function handleKonfirmasiInput(e) {
+  let value = e.target.value;
+  
+  // Hapus semua karakter kecuali angka, spasi, dan dash
+  value = value.replace(/[^\d\s\-]/g, '');
+  
+  // Batasi panjang maksimal (18 karakter termasuk separator)
+  if (value.length > 18) {
+    value = value.substring(0, 18);
+  }
+  
+  // Update input value
+  e.target.value = value;
+}
+
+/**
+ * Format nomor telepon dengan separator (opsional).
+ * Contoh: 081234567890 → 0812 3456 7890
+ */
+function formatPhoneNumber(phone) {
+  // Ekstrak hanya angka
+  const digitsOnly = phone.replace(/[\s\-]/g, '');
+  
+  // Format: 0812 3456 7890
+  if (digitsOnly.length >= 10) {
+    return digitsOnly.replace(/(\d{4})(\d{4})(\d+)/, '$1 $2 $3');
+  }
+  
+  return digitsOnly;
+}
+
+/**
+ * Validasi nomor konfirmasi saat blur (kehilangan fokus).
+ */
+function validateKonfirmasiNumber() {
+  const value = konfirmasiInput.value.trim();
+  
+  // Jika kosong, OK (pakai default)
+  if (!value) {
+    konfirmasiInput.classList.remove('input-error');
+    return true;
+  }
+  
+  // Ekstrak hanya angka untuk validasi panjang
+  const digitsOnly = value.replace(/[\s\-]/g, '');
+  
+  // Validasi panjang (10-13 digit untuk nomor Indonesia)
+  if (digitsOnly.length < 10 || digitsOnly.length > 13) {
+    konfirmasiInput.classList.add('input-error');
+    showToast('⚠️ Nomor konfirmasi harus 10-13 digit');
+    return false;
+  }
+  
+  // Validasi harus dimulai dengan 0 atau +62
+  if (!digitsOnly.startsWith('0') && !digitsOnly.startsWith('62')) {
+    konfirmasiInput.classList.add('input-error');
+    showToast('⚠️ Nomor harus dimulai dengan 0 atau 62');
+    return false;
+  }
+  
+  // Valid
+  konfirmasiInput.classList.remove('input-error');
+  return true;
 }
 
 /**
@@ -243,6 +315,12 @@ async function handleGenerate() {
       showToast('⚠️ Format link tidak valid. Pastikan URL lengkap.');
       return;
     }
+  }
+
+  // ── Tentukan nomor konfirmasi (custom atau default) ──
+  // Validasi dulu jika ada custom input
+  if (customKonfirmasi && !validateKonfirmasiNumber()) {
+    return; // Stop jika validasi gagal
   }
 
   // ── Tentukan nomor konfirmasi (custom atau default) ──
