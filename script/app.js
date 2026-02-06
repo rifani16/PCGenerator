@@ -75,6 +75,10 @@ async function loadData() {
       fetch(QRIS_URL)
     ]);
 
+    CONFIG = await configResponse.json();
+    PROGRAMS = await programsResponse.json();
+    QRIS_DATA = await qrisResponse.json();
+
     // Set default value untuk nomor konfirmasi
     if (CONFIG && CONFIG.konfirmasiDefault) {
       konfirmasiInput.value = CONFIG.konfirmasiDefault;
