@@ -69,7 +69,7 @@ async function loadData() {
 
   } catch (error) {
     console.error('Error loading JSON files:', error);
-    showToast('❌ Gagal memuat data. Periksa data.json & program.json');
+    showToast('❌ Gagal memuat data');
     generateBtn.disabled = true;
   }
 }
