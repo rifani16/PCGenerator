@@ -48,10 +48,19 @@ document.addEventListener('DOMContentLoaded', async () => {
  */
 async function loadData() {
   try {
+
+    const BASE_PATH = window.location.pathname.includes('/PCGenerator/')
+    ? '/PCGenerator'
+    : '';
+    
+    const CONFIG_URL = `${BASE_PATH}/json/data.json`;
+    const PROGRAM_URL = `${BASE_PATH}/json/program.json`;
+
+
     // Load kedua file JSON secara paralel
     const [configResponse, programsResponse] = await Promise.all([
-      fetch('/PCGenerator/json/data.json'),
-      fetch('/PCGenerator/json/program.json')
+      fetch(CONFIG_URL),
+      fetch(PROGRAM_URL)
     ]);
 
     if (!configResponse.ok || !programsResponse.ok) {
