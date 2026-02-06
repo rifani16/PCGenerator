@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaign Generator - Yakesma Kalsel</title>
+  <meta name="description" content="Generator narasi WhatsApp untuk program donasi. Masukkan kode affiliate dan dapatkan pesan siap kirim." />
+
+  <!-- Favicon (emoji fallback) -->
+  <link rel="icon" type="image/svg+xml" data-emoji="🤝"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤝</text></svg>" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Hero / Header ─────────────────────────────────────────────────────── -->
+  <header class="hero">
+    <div class="hero-icon">🤝</div>
+    <h1>Campaign Generator</h1>
+    <p>Dapatkan narasi WhatsApp siap kirim dalam hitungan detik</p>
+  </header>
+
+  <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+  <main class="container">
+
+    <!-- Card 1 – Input -->
+    <section class="card">
+      <h2 class="card-title"><span class="icon">📌</span> Pilih Program & Input Affiliate</h2>
+
+      <div class="form-group">
+        <label for="programSelect">Program Donasi</label>
+        <select id="programSelect">
+          <option value="" disabled selected>— Pilih program —</option>
+          <!-- Diisi otomatis oleh app.js -->
+        </select>
+      </div>
+
+      <!-- Toggle mode input -->
+      <div class="form-group">
+        <label>Mode Input Affiliate</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="inputMode" value="code" checked />
+            <span class="radio-text">Kode Affiliate</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="inputMode" value="link" />
+            <span class="radio-text">Link Lengkap</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Input Kode Affiliate -->
+      <div class="form-group input-mode-section" id="codeInputSection">
+        <label for="affiliateInput">Kode Affiliate</label>
+        <input type="text" id="affiliateInput" placeholder="Contoh: JOHN2024" autocomplete="off" spellcheck="false" />
+        <small class="input-hint">Masukkan kode affiliate Anda saja</small>
+      </div>
+
+      <!-- Input Link Lengkap -->
+      <div class="form-group input-mode-section hidden" id="linkInputSection">
+        <label for="affiliateLinkInput">Link Affiliate Lengkap</label>
+        <input type="text" id="affiliateLinkInput" placeholder="Contoh: https://temanberbagi.org/program/yatim-bahagia-yakesma?affiliate_code=JOHN2024" autocomplete="off" spellcheck="false" />
+        <small class="input-hint">Paste link lengkap yang sudah ada kode affiliate-nya</small>
+      </div>
+
+      <!-- Divider -->
+      <div class="form-divider"></div>
+
+      <!-- Nomor Konfirmasi (Optional) -->
+      <div class="form-group">
+        <label for="konfirmasiInput">
+          Nomor Konfirmasi (Opsional)
+        </label>
+        <input type="text" id="konfirmasiInput" placeholder="Contoh: 0812-9999-8888" autocomplete="off" spellcheck="false" />
+        <small class="input-hint">Kosongkan jika tidak ingin menggunakan nomor pribadi</small>
+      </div>
+
+      <button class="btn btn-primary" id="generateBtn">
+        ⚡ Generate &amp; Copy
+      </button>
+    </section>
+
+    <!-- Card 2 – Preview (tersembunyi sampai generate) -->
+    <section class="card preview-section hidden" id="previewSection">
+      <h2 class="card-title"><span class="icon">📝</span> Hasil Narasi</h2>
+
+      <!-- Link affiliate yang terbentuk -->
+      <div class="link-badge">
+        <div class="link-badge-label">Link Affiliate</div>
+        <div class="link-badge-url" id="linkPreview">–</div>
+      </div>
+
+      <!-- Narasi siap kirim -->
+      <div class="narasi-box" id="previewText"></div>
+
+      <!-- Tombol aksi -->
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="copyBtn">
+          📋 Copy Narasi
+        </button>
+        <button class="btn btn-whatsapp" id="shareBtn">
+          💬 Share ke WhatsApp
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ────────────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    Campaign Generator &middot; Yakesma Kalsel
+  </footer>
+
+  <!-- ── Toast Notifikasi ──────────────────────────────────────────────────── -->
+  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- ── Scripts (JSON version - loads data from data.json) ───────────────── -->
+  <script src="script/app.js"></script>
+</body>
+</html>

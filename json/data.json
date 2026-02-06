@@ -1,0 +1,10 @@
+{
+  "baseUrl": "https://temanberbagi.org/",
+  "rekening": {
+    "bsi": "200 300 4301",
+    "mandiri": "03 100 40 800 800",
+    "anBSI": "LAZNAS Yakesma",
+    "anMandiri": "Yay. Kesejahteraan Madani"
+  },
+  "konfirmasiDefault": "08 123 2222 108"
+}
