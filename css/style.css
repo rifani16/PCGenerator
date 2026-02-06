@@ -256,6 +256,251 @@ input[type="text"]::placeholder {
   display: none;
 }
 
+/* ── Form divider ──────────────────────────────────────────────────────────── */
+.form-divider {
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--clr-border) 20%, 
+    var(--clr-border) 80%, 
+    transparent 100%);
+  margin: 24px 0;
+}
+
+/* ── Optional badge ────────────────────────────────────────────────────────── */
+.optional-badge {
+  display: inline-block;
+  background: var(--clr-accent-lt);
+  color: var(--clr-accent);
+  font-size: .68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+/* ── Section label ─────────────────────────────────────────────────────────── */
+.section-label {
+  display: block;
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--clr-primary);
+  margin-bottom: 12px;
+  letter-spacing: .02em;
+}
+
+/* ── Download grid ─────────────────────────────────────────────────────────── */
+.download-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 420px) {
+  .download-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Download button ───────────────────────────────────────────────────────── */
+.btn-download {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--clr-primary-lt);
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: left;
+}
+
+.btn-download:hover:not(:disabled) {
+  background: #fff;
+  border-color: var(--clr-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-download:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-download .btn-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.btn-download .btn-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.btn-download .btn-title {
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--clr-text);
+  line-height: 1.2;
+}
+
+.btn-download .btn-subtitle {
+  font-size: .75rem;
+  color: var(--clr-text-muted);
+  line-height: 1.2;
+}
+
+/* ── Modal ─────────────────────────────────────────────────────────────────── */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(4px);
+  animation: fadeIn .2s ease-out;
+}
+
+.modal-content {
+  position: relative;
+  background: var(--clr-card);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0,0,0,.2);
+  max-width: 450px;
+  width: 100%;
+  max-height: 80vh;
+  overflow: hidden;
+  animation: slideUp .3s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--clr-primary);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--clr-text-muted);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+
+.modal-close:hover {
+  background: var(--clr-primary-lt);
+  color: var(--clr-primary);
+}
+
+.modal-body {
+  padding: 20px 24px;
+  max-height: calc(80vh - 80px);
+  overflow-y: auto;
+}
+
+.modal-description {
+  font-size: .88rem;
+  color: var(--clr-text-muted);
+  margin-bottom: 16px;
+}
+
+/* ── QRIS region list ──────────────────────────────────────────────────────── */
+.qris-region-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qris-region-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--clr-primary-lt);
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.qris-region-item:hover {
+  background: #fff;
+  border-color: var(--clr-primary);
+  transform: translateX(4px);
+}
+
+.qris-region-name {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--clr-text);
+}
+
+.qris-region-icon {
+  font-size: 1.2rem;
+}
+
+/* ── Form divider ──────────────────────────────────────────────────────────── */
+.form-divider {
+  height: 1px;
+  background: var(--clr-border);
+  margin: 24px 0;
+  position: relative;
+}
+
 /* ══════════════════════════════════════════════════════════════════════════════
    BUTTONS
    ══════════════════════════════════════════════════════════════════════════════ */

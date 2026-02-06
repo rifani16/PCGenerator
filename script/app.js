@@ -28,6 +28,17 @@ const codeInputSection   = document.getElementById('codeInputSection');
 const linkInputSection   = document.getElementById('linkInputSection');
 const inputModeRadios    = document.querySelectorAll('input[name="inputMode"]');
 
+// Download buttons
+const downloadPosterBtn  = document.getElementById('downloadPosterBtn');
+const downloadQrisBtn    = document.getElementById('downloadQrisBtn');
+const posterProgramName  = document.getElementById('posterProgramName');
+
+// QRIS Modal
+const qrisModal          = document.getElementById('qrisModal');
+const qrisModalOverlay   = document.getElementById('qrisModalOverlay');
+const qrisModalClose     = document.getElementById('qrisModalClose');
+const qrisRegionList     = document.getElementById('qrisRegionList');
+
 // ─── State internal ──────────────────────────────────────────────────────────
 let currentNarasi = '';   // narasi yang sudah di-generate (siap copy)
 let currentLink   = '';   // link affiliate yang sudah di-generate
@@ -35,6 +46,7 @@ let currentLink   = '';   // link affiliate yang sudah di-generate
 // Data dari JSON (akan di-load saat init)
 let CONFIG = null;    // data.json - config umum
 let PROGRAMS = null;  // program.json - data program
+let QRIS_DATA = null; // qris.json - data QRIS per daerah
 
 // ─── Inisialisasi ────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
@@ -44,41 +56,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
- * Load data dari data.json dan program.json.
+ * Load data dari data.json, program.json, dan qris.json.
  */
 async function loadData() {
   try {
-
     const BASE_PATH = window.location.pathname.includes('/PCGenerator/')
     ? '/PCGenerator'
     : '';
     
     const CONFIG_URL = `${BASE_PATH}/json/data.json`;
     const PROGRAM_URL = `${BASE_PATH}/json/program.json`;
+    const QRIS_URL = `${BASE_PATH}/json/qris.json`;
 
-
-    // Load kedua file JSON secara paralel
-    const [configResponse, programsResponse] = await Promise.all([
+    // Load ketiga file JSON secara paralel
+    const [configResponse, programsResponse, qrisResponse] = await Promise.all([
       fetch(CONFIG_URL),
-      fetch(PROGRAM_URL)
+      fetch(PROGRAM_URL),
+      fetch(QRIS_URL)
     ]);
-
-    if (!configResponse.ok || !programsResponse.ok) {
-      throw new Error('Failed to load JSON files');
-    }
-
-    CONFIG = await configResponse.json();
-    PROGRAMS = await programsResponse.json();
 
     // Set default value untuk nomor konfirmasi
     if (CONFIG && CONFIG.konfirmasiDefault) {
-      konfirmasiInput.value = '';
+      konfirmasiInput.value = CONFIG.konfirmasiDefault;
       konfirmasiInput.placeholder = `Default: ${CONFIG.konfirmasiDefault}`;
     }
 
+    // Populate QRIS region list in modal
+    populateQrisRegions();
+
   } catch (error) {
     console.error('Error loading JSON files:', error);
-    showToast('❌ Gagal memuat data');
+    showToast('❌ Gagal memuat data. Periksa JSON files');
     generateBtn.disabled = true;
   }
 }
@@ -98,6 +106,26 @@ function populateDropdown() {
 }
 
 /**
+ * Populate QRIS region list dalam modal.
+ */
+function populateQrisRegions() {
+  if (!QRIS_DATA) return;
+  
+  qrisRegionList.innerHTML = '';
+  
+  Object.keys(QRIS_DATA).forEach(region => {
+    const item = document.createElement('div');
+    item.className = 'qris-region-item';
+    item.innerHTML = `
+      <span class="qris-region-name">${region}</span>
+      <span class="qris-region-icon">📥</span>
+    `;
+    item.addEventListener('click', () => downloadQrisFile(region));
+    qrisRegionList.appendChild(item);
+  });
+}
+
+/**
  * Pasangkan semua event listener.
  */
 function bindEvents() {
@@ -109,6 +137,17 @@ function bindEvents() {
   inputModeRadios.forEach(radio => {
     radio.addEventListener('change', handleInputModeChange);
   });
+
+  // Download buttons
+  downloadPosterBtn.addEventListener('click', handleDownloadPoster);
+  downloadQrisBtn.addEventListener('click', openQrisModal);
+
+  // QRIS Modal
+  qrisModalClose.addEventListener('click', closeQrisModal);
+  qrisModalOverlay.addEventListener('click', closeQrisModal);
+
+  // Program selection - update poster button
+  programSelect.addEventListener('change', updatePosterButton);
 
   // Reset preview ketika input berubah
   programSelect.addEventListener('change', resetPreview);
@@ -210,9 +249,9 @@ async function handleGenerate() {
 
 Rekening:
 🏦 BSI ${CONFIG.rekening.bsi}
-a.n ${CONFIG.rekening.anBSI}
+a.n ${CONFIG.rekening.atas_nama}
 🏦 Mandiri ${CONFIG.rekening.mandiri}
-a.n ${CONFIG.rekening.anMandiri}
+a.n ${CONFIG.rekening.atas_nama}
 
 📞 Konfirmasi: ${nomorKonfirmasi}`;
 
@@ -261,6 +300,93 @@ function handleShareWhatsApp() {
     : `https://wa.me/?text=${encoded}`;
 
   window.open(url, '_blank');
+}
+
+// ─── Download Handlers ───────────────────────────────────────────────────────
+
+/**
+ * Update poster button state when program is selected.
+ */
+function updatePosterButton() {
+  const programKey = programSelect.value;
+  
+  if (programKey && PROGRAMS[programKey]) {
+    const program = PROGRAMS[programKey];
+    downloadPosterBtn.disabled = false;
+    posterProgramName.textContent = program.name;
+  } else {
+    downloadPosterBtn.disabled = true;
+    posterProgramName.textContent = 'Pilih program dulu';
+  }
+}
+
+/**
+ * Download poster untuk program yang dipilih.
+ */
+function handleDownloadPoster() {
+  const programKey = programSelect.value;
+  
+  if (!programKey || !PROGRAMS[programKey]) {
+    showToast('⚠️ Pilih program dulu.');
+    return;
+  }
+  
+  const program = PROGRAMS[programKey];
+  
+  if (!program.posterDriveId) {
+    showToast('⚠️ Poster untuk program ini belum tersedia.');
+    return;
+  }
+  
+  // Build Google Drive download link
+  const driveUrl = `https://drive.google.com/uc?export=download&id=${program.posterDriveId}`;
+  
+  // Open in new tab
+  window.open(driveUrl, '_blank');
+  showToast('📥 Membuka download poster...');
+}
+
+/**
+ * Open QRIS modal.
+ */
+function openQrisModal() {
+  qrisModal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden'; // Prevent background scroll
+}
+
+/**
+ * Close QRIS modal.
+ */
+function closeQrisModal() {
+  qrisModal.classList.add('hidden');
+  document.body.style.overflow = ''; // Restore scroll
+}
+
+/**
+ * Download QRIS file untuk daerah tertentu.
+ */
+function downloadQrisFile(region) {
+  if (!QRIS_DATA[region]) {
+    showToast('⚠️ Data QRIS tidak ditemukan.');
+    return;
+  }
+  
+  const qrisInfo = QRIS_DATA[region];
+  
+  if (!qrisInfo.driveId) {
+    showToast('⚠️ QRIS untuk daerah ini belum tersedia.');
+    return;
+  }
+  
+  // Build Google Drive download link
+  const driveUrl = `https://drive.google.com/uc?export=download&id=${qrisInfo.driveId}`;
+  
+  // Open in new tab
+  window.open(driveUrl, '_blank');
+  showToast(`📥 Membuka download QRIS ${region}...`);
+  
+  // Close modal
+  closeQrisModal();
 }
 
 // ─── Utility ─────────────────────────────────────────────────────────────────

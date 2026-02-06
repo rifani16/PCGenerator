@@ -55,7 +55,7 @@
       <!-- Input Kode Affiliate -->
       <div class="form-group input-mode-section" id="codeInputSection">
         <label for="affiliateInput">Kode Affiliate</label>
-        <input type="text" id="affiliateInput" placeholder="Contoh: KBSM" autocomplete="off" spellcheck="false" />
+        <input type="text" id="affiliateInput" placeholder="Contoh: KSBM" autocomplete="off" spellcheck="false" />
         <small class="input-hint">Masukkan kode affiliate Anda saja</small>
       </div>
 
@@ -76,6 +76,36 @@
         </label>
         <input type="text" id="konfirmasiInput" placeholder="Contoh: 0812-9999-8888" autocomplete="off" spellcheck="false" />
         <small class="input-hint">Kosongkan jika tidak ingin menggunakan nomor pribadi</small>
+      </div>
+
+      <!-- Divider -->
+      <div class="form-divider"></div>
+
+      <!-- Download Section -->
+      <div class="form-group">
+        <label class="section-label">
+          📥 Download Materi Campaign
+        </label>
+        
+        <div class="download-grid">
+          <!-- Poster Program -->
+          <button type="button" class="btn btn-download" id="downloadPosterBtn" disabled>
+            <span class="btn-icon">🖼️</span>
+            <span class="btn-label">
+              <span class="btn-title">Poster Program</span>
+              <span class="btn-subtitle" id="posterProgramName">Pilih program dulu</span>
+            </span>
+          </button>
+
+          <!-- QRIS Daerah -->
+          <button type="button" class="btn btn-download" id="downloadQrisBtn">
+            <span class="btn-icon">📱</span>
+            <span class="btn-label">
+              <span class="btn-title">QRIS</span>
+              <span class="btn-subtitle">Pilih daerah</span>
+            </span>
+          </button>
+        </div>
       </div>
 
       <button class="btn btn-primary" id="generateBtn">

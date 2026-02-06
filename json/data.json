@@ -6,5 +6,24 @@
     "anBSI": "LAZNAS Yakesma",
     "anMandiri": "Yay. Kesejahteraan Madani"
   },
-  "konfirmasiDefault": "08 123 2222 108"
+  "konfirmasiDefault": "08 123 2222 108",
+  "googleDrive": {
+    "posterFolder": "https://drive.google.com/drive/folders/1Yk3oG-0bvFsrTDXDwsFpRY5D58vkqmiu?usp=sharing",
+    "qrisFolder": "https://drive.google.com/drive/folders/1drw5kYRIvcDj2Z9e9oNLyCaIL1YqTquz?usp=sharing"
+  },
+  "qrisRegions": [
+    "Kabupaten Tanah Laut",
+    "Kabupaten Kotabaru",
+    "Kabupaten Banjar",
+    "Kabupaten Barito Kuala",
+    "Kabupaten Tapin",
+    "Kabupaten Hulu Sungai Selatan",
+    "Kabupaten Hulu Sungai Tengah",
+    "Kabupaten Hulu Sungai Utara",
+    "Kabupaten Tabalong",
+    "Kabupaten Tanah Bumbu",
+    "Kabupaten Balangan",
+    "Kota Banjarmasin",
+    "Kota Banjarbaru"
+  ]
 }
